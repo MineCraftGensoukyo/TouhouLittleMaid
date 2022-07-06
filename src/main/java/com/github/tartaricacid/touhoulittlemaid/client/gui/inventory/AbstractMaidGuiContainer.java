@@ -46,6 +46,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
@@ -67,6 +68,7 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     private static int taskPageIndex;
     protected MaidMainContainer container;
     EntityMaid maid;
+    Future<?> timerTask;
     private int guiId;
     private int taskPageTotal;
     private GuiButtonToggle togglePickup;
@@ -569,17 +571,24 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
     }
 
     private void syncEffectThread() {
-        timer = new ScheduledThreadPoolExecutor(1, new BasicThreadFactory.Builder()
-                .namingPattern("sync-maid-effect-schedule").daemon(true).build());
-        timer.scheduleAtFixedRate(() -> CommonProxy.INSTANCE.sendToServer(new EffectRequest(maid.getUniqueID())),
+        if (timer == null || timer.isShutdown()) {
+            timer = new ScheduledThreadPoolExecutor(1, new BasicThreadFactory.Builder()
+                    .namingPattern("sync-maid-effect-schedule").daemon(true).build());
+        }
+        timerTask = timer.scheduleAtFixedRate(() -> CommonProxy.INSTANCE.sendToServer(new EffectRequest(maid.getUniqueID())),
                 0, 500, TimeUnit.MILLISECONDS);
     }
 
     @Override
     public void onGuiClosed() {
         // 关闭发包线程
-        timer.shutdownNow();
+        timerTask.cancel(true);
+        timerTask = null;
         super.onGuiClosed();
+    }
+
+    public static void stopTimer() {
+        if (timer != null) timer.shutdown();
     }
 
     /**

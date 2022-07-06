@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +39,7 @@ public final class MusicManger {
     private static final Path LOCAL_MUSIC_LIST_FILE = ROOT_FOLDER.resolve("music_list");
     private static final ResourceLocation MUSIC_JSON = new ResourceLocation(TouhouLittleMaid.MOD_ID, "music.json");
     private static final ThreadPoolExecutor POOL = new ThreadPoolExecutor(1, 1, 0L,
-            TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+            TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>(), new BasicThreadFactory.Builder().namingPattern("touhoumaid-music-%d").build());
     private static final MusicJsonInfo DEFAULT_INFO = MusicJsonInfo.getDefaultInstance();
     public static CopyOnWriteArrayList<NetEaseMusicList> MUSIC_LIST_GROUP = Lists.newCopyOnWriteArrayList();
 
