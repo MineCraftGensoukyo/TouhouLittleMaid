@@ -59,9 +59,4 @@ public class TouhouLittleMaid {
     public void loadComplete(FMLLoadCompleteEvent event) {
         PROXY.loadComplete(event);
     }
-
-    @Mod.EventHandler
-    public void serverStopping(FMLServerStoppingEvent event) {
-        PROXY.serverStopping(event);
-    }
 }

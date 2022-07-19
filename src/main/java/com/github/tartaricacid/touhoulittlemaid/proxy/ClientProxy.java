@@ -5,7 +5,6 @@ import com.github.tartaricacid.touhoulittlemaid.client.audio.music.MusicManger;
 import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadHataCommand;
 import com.github.tartaricacid.touhoulittlemaid.client.command.ReloadMaidResCommand;
 import com.github.tartaricacid.touhoulittlemaid.client.download.InfoGetManager;
-import com.github.tartaricacid.touhoulittlemaid.client.gui.inventory.AbstractMaidGuiContainer;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.entity.*;
 import com.github.tartaricacid.touhoulittlemaid.client.renderer.texture.HataTextureManager;
 import com.github.tartaricacid.touhoulittlemaid.client.resources.CustomHataTextureLoader;
@@ -32,7 +31,6 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import noppes.npcs.client.model.ModelPlayerAlt;
@@ -119,13 +117,6 @@ public class ClientProxy extends CommonProxy implements ISelectiveResourceReload
     public void onResourceManagerReload(@Nonnull IResourceManager resourceManager, @Nonnull Predicate<IResourceType> resourcePredicate) {
         if (resourcePredicate.test(VanillaResourceType.LANGUAGES)) {
             initModelList();
-        }
-    }
-
-    @Override
-    public void serverStopping(FMLServerStoppingEvent event) {
-        if (event.getSide().isClient()) {
-            AbstractMaidGuiContainer.stopTimer();
         }
     }
 }

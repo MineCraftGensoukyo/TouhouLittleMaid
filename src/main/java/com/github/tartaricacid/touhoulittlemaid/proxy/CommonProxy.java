@@ -211,8 +211,6 @@ public class CommonProxy {
         event.registerServerCommand(new ReloadServerPackCommand());
     }
 
-    public void serverStopping(FMLServerStoppingEvent event) {}
-
     /**
      * 初始化默认的模型列表
      */

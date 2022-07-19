@@ -584,11 +584,8 @@ public abstract class AbstractMaidGuiContainer extends GuiContainer {
         // 关闭发包线程
         timerTask.cancel(true);
         timerTask = null;
+        timer.shutdown();
         super.onGuiClosed();
-    }
-
-    public static void stopTimer() {
-        if (timer != null) timer.shutdown();
     }
 
     /**
